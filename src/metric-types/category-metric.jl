@@ -35,13 +35,17 @@ _validate_category(groups::Vector{String}, rates::Vector{Float64}) = begin
     length(unique(groups)) == length(groups) || 
         throw(ArgumentError("`groups` must be unique"))
 
-    # rates must be in [0, 1]
-    all(0 .<= rates .<= 1) || 
-        throw(ArgumentError("All rates must be in [0, 1]"))
+    # rates must be in [0, 1)
+    all(0 .<= rates .< 1) || 
+        throw(ArgumentError("All rates must be in [0, 1)"))
 
     # Check that rates sum = 1
     isapprox(sum(rates), 1., atol=RATE_TOL) ||
         throw(ArgumentError("Sum of rates must be 1, got $(sum(rates))"))
+
+    # groups and rates must be the same length
+    length(groups) == length(rates) || 
+        throw(DimensionMismatch("`groups` and `rates` must be the same length, got $(length(groups)) and $(length(rates))"))
 end
 
 function mismatch(

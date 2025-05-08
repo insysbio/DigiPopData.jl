@@ -10,7 +10,7 @@ m1 = MeanMetric(100, 2.0, 0.5)
 @test_throws ArgumentError mismatch([1., 2., Inf], m1) # Inf value
 @test_throws MethodError mismatch([1., 2., missing], m1) # missing value
 
-# incorrect input
+# incorrect metric
 @test_throws ArgumentError MeanMetric(100, 2.0, -0.5) # negative sd
 @test_throws ArgumentError MeanMetric(100, 2.0, 0.0) # zero sd
 @test_throws ArgumentError MeanMetric(100, 2.0, NaN) # NaN sd
