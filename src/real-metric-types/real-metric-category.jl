@@ -74,6 +74,11 @@ function mismatch_expression(
     X_len::Int
 )
     validate(sim, dp)
+    # Check that the length of sim and X are equal
+    length(sim) == length(X) || throw(DimensionMismatch("Length of simulation data and X must be equal"))
+    # Check that X_len is less than sim
+    X_len <= length(sim) || throw(DimensionMismatch("X_len must be less than or equal to the length of simulation data"))
+    
     len = sum(dp.group_active) - 1
 
     # calculate the loss

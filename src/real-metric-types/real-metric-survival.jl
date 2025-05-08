@@ -9,6 +9,10 @@ struct RealMetricSurvival <: RealMetric
 
     RealMetricSurvival(size::Int, levels::Vector{Float64}, values::Vector{Float64}) = begin
         _validate_survival(levels, values)
+        # Check that the length of sim and X are equal
+        length(sim) == length(X) || throw(DimensionMismatch("Length of simulation data and X must be equal"))
+        # Check that X_len is less than sim
+        X_len <= length(sim) || throw(DimensionMismatch("X_len must be less than or equal to the length of simulation data"))
 
         # current level minus prev level
         extended_levels = [1; levels; 0.0]

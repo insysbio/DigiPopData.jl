@@ -12,31 +12,46 @@ end
 _validate_mean_sd(mean::Float64, sd::Float64) = begin
     # Check that standard deviation is positive
     sd > 0 || throw(ArgumentError("Standard deviation must be positive"))
+    # Check that standard deviation is finite
+    isfinite(sd) || throw(ArgumentError("Standard deviation must be finite"))
+    # Check that standard deviation is not NaN
+    !isnan(sd) || throw(ArgumentError("Standard deviation must not be NaN"))
+    # Check that mean is finite
+    isfinite(mean) || throw(ArgumentError("Mean must be finite"))
+    # Check that mean is not NaN
+    !isnan(mean) || throw(ArgumentError("Mean must not be NaN"))
 end
 
-function mismatch(sim::Vector{Float64}, dp::RealMetricMeanSD)
+function mismatch(sim::AbstractVector{<:Real}, dp::RealMetricMeanSD)
     validate(sim, dp)
 
-    mu_virt = mean(sim)
-    sigma_sq_virt = var(sim)
-    loss1 = length(sim) * (mu_virt - dp.mean)^2 / dp.sd^2
+    mu_virt = sum(sim) / length(sim)
+    #sigma_sq_virt = sum(sim .^2) / length(sim) - mu_virt^2
+    # to satisfy similar results for mismatch and mismatch_expression
+    sigma_sq_virt = sum((sim .- dp.mean) .^2) / length(sim) # AffExpr
+    loss1 = length(sim) * (mu_virt - dp.mean)^2 / dp.sd^2 
     loss2 = length(sim) / 2 * (sigma_sq_virt - dp.sd^2)^2 / dp.sd^4
 
     loss1 + loss2
 end
 
-function mismatch_expression(sim::Vector{Float64}, dp::RealMetricMeanSD, X::Vector{VariableRef}, X_len::Int)
+function mismatch_expression(sim::AbstractVector{<:Real}, dp::RealMetricMeanSD, X::Vector{VariableRef}, X_len::Int)
     validate(sim, dp)
+    # Check that the length of sim and X are equal
+    length(sim) == length(X) || throw(DimensionMismatch("Length of simulation data and X must be equal"))
+    # Check that X_len is less than sim
+    X_len <= length(sim) || throw(DimensionMismatch("X_len must be less than or equal to the length of simulation data"))
 
-    mu_virt = sum(sim .* X) / X_len
-    sigma_sq_virt = sum(sim .^2 .* X) / X_len - mu_virt^2
-    loss1 = X_len * (mu_virt - dp.mean)^2 / dp.sd^2
-    loss2 = X_len / 2 * (sigma_sq_virt - dp.sd^2)^2 / dp.sd^4
+    mu_virt = sum(sim .* X) / X_len # AffExpr
+    # here we should use mu_virt instead of dp.mean but in this case it would not be AffExpr
+    sigma_sq_virt = sum((sim .- dp.mean) .^2 .* X) / X_len  # AffExpr
+    loss1 = X_len * (mu_virt - dp.mean)^2 / dp.sd^2 # QuadExpr
+    loss2 = X_len / 2 * (sigma_sq_virt - dp.sd^2)^2 / dp.sd^4 # QuadExpr
 
     loss1 + loss2
 end
 
-function validate(sim::Vector{Float64}, ::RealMetricMeanSD)
+function validate(sim::AbstractVector{<:Real}, ::RealMetricMeanSD)
     # length must be >= 3
     length(sim) >= 3 || 
         throw(ArgumentError("Simulation data must have at least 3 elements"))

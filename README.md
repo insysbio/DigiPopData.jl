@@ -43,8 +43,8 @@ binding1 = MetricBinding(
     "Point1", # unique identifier for the binding
     "scn1",   # reference to simulation scenario
     metric1,  # connected metric
-    "ATP",    # name of endpoint (variable) to compare
-    true      # if false, the metric has the input to loss function
+    "TTE",    # name of endpoint (variable) in virtual individual point
+    true      # if false, the metric has no input to loss function
 )
 ```
 
