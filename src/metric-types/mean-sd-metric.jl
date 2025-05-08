@@ -1,9 +1,9 @@
-struct RealMetricMeanSD <: RealMetric
+struct MeanSDMetric <: AbstractMetric
     size::Int
     mean::Float64
     sd::Float64
 
-    RealMetricMeanSD(size::Int, mean::Float64, sd::Float64) = begin
+    MeanSDMetric(size::Int, mean::Float64, sd::Float64) = begin
         _validate_mean_sd(mean, sd)
         new(size, mean, sd)
     end
@@ -22,7 +22,7 @@ _validate_mean_sd(mean::Float64, sd::Float64) = begin
     !isnan(mean) || throw(ArgumentError("Mean must not be NaN"))
 end
 
-function mismatch(sim::AbstractVector{<:Real}, dp::RealMetricMeanSD)
+function mismatch(sim::AbstractVector{<:Real}, dp::MeanSDMetric)
     validate(sim, dp)
 
     mu_virt = sum(sim) / length(sim)
@@ -35,7 +35,7 @@ function mismatch(sim::AbstractVector{<:Real}, dp::RealMetricMeanSD)
     loss1 + loss2
 end
 
-function mismatch_expression(sim::AbstractVector{<:Real}, dp::RealMetricMeanSD, X::Vector{VariableRef}, X_len::Int)
+function mismatch_expression(sim::AbstractVector{<:Real}, dp::MeanSDMetric, X::Vector{VariableRef}, X_len::Int)
     validate(sim, dp)
     # Check that the length of sim and X are equal
     length(sim) == length(X) || throw(DimensionMismatch("Length of simulation data and X must be equal"))
@@ -51,7 +51,7 @@ function mismatch_expression(sim::AbstractVector{<:Real}, dp::RealMetricMeanSD, 
     loss1 + loss2
 end
 
-function validate(sim::AbstractVector{<:Real}, ::RealMetricMeanSD)
+function validate(sim::AbstractVector{<:Real}, ::MeanSDMetric)
     # length must be >= 3
     length(sim) >= 3 || 
         throw(ArgumentError("Simulation data must have at least 3 elements"))
@@ -76,5 +76,5 @@ PARSERS["mean_sd"] = (row) -> begin
     sd_string = row[Symbol("metric.sd")]
     sd = parse(Float64, sd_string)
 
-    RealMetricMeanSD(size, mean, sd)
+    MeanSDMetric(size, mean, sd)
 end

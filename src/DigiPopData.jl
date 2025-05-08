@@ -1,7 +1,7 @@
 
 module DigiPopData
 
-include("real-metric-types/real-metric.jl")
+include("metric-types/abstract-metric.jl")
 include("metric-binding.jl")
 include("loaders.jl")
 
@@ -10,12 +10,12 @@ export MetricBinding, get_loss
 export loadMetricBindings
 
 # list of data point types can be extended by adding new types to this list
-include("real-metric-types/real-metric-mean.jl")
-include("real-metric-types/real-metric-mean-sd.jl")
-include("real-metric-types/real-metric-category.jl")
-include("real-metric-types/real-metric-quantile.jl")
-include("real-metric-types/real-metric-survival.jl")
+include("metric-types/mean-metric.jl")
+include("metric-types/mean-sd-metric.jl")
+include("metric-types/category-metric.jl")
+include("metric-types/quantile-metric.jl")
+include("metric-types/survival-metric.jl")
 
-export RealMetricMean, RealMetricMeanSD, RealMetricCategory, RealMetricQuantile, RealMetricSurvival
+export MeanMetric, MeanSDMetric, CategoryMetric, QuantileMetric, SurvivalMetric
 
 end

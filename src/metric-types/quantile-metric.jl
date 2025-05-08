@@ -3,7 +3,7 @@
     It means that value is not exist and must be excluded from statistics, so metrics was created on this data.
 =#
 
-struct RealMetricQuantile <: RealMetric
+struct QuantileMetric <: AbstractMetric
     size::Int
     levels::Vector{Float64}
     values::Vector{Float64}
@@ -13,7 +13,7 @@ struct RealMetricQuantile <: RealMetric
     group_active::Vector{Bool}
     rates::Vector{Float64} # rates of the groups
 
-    RealMetricQuantile(size::Int, levels::Vector{Float64}, values::Vector{Float64}, skip_nan::Bool = true) = begin
+    QuantileMetric(size::Int, levels::Vector{Float64}, values::Vector{Float64}, skip_nan::Bool = true) = begin
         _validate_quantile(levels, values)
 
         extended_levels = [0; levels; 1.0]
@@ -48,7 +48,7 @@ _validate_quantile(levels::Vector{Float64}, values::Vector{Float64}) = begin
         throw(ArgumentError("`values` must be sorted in ascending order"))
 end
 
-function mismatch(sim::Vector{Float64}, dp::RealMetricQuantile)
+function mismatch(sim::Vector{Float64}, dp::QuantileMetric)
     validate(sim, dp)
 
     len = sum(dp.group_active) - 1 # degree of freedom
@@ -71,7 +71,7 @@ end
 
 function mismatch_expression(
     sim::AbstractVector{Float64},
-    dp::RealMetricQuantile,
+    dp::QuantileMetric,
     X::Vector{VariableRef},
     X_len::Int
 )
@@ -101,7 +101,7 @@ function mismatch_expression(
     loss
 end
 
-function validate(sim::Vector{Float64}, dp::RealMetricQuantile)
+function validate(sim::Vector{Float64}, dp::QuantileMetric)
     # Check that the simulation data is not empty
     isempty(sim) && 
         throw(ArgumentError("Simulation data cannot be empty"))
@@ -125,5 +125,5 @@ PARSERS["quantile"] = (row) -> begin
         parse(Bool, skip_nan_string) : 
         skip_nan_string
 
-    RealMetricQuantile(size, levels, values, Bool(skip_nan))
+    QuantileMetric(size, levels, values, Bool(skip_nan))
 end

@@ -4,7 +4,7 @@ using DataFrames
 struct MetricBinding
     id::String # not sure this is needed
     scenario::String
-    metric::RealMetric
+    metric::AbstractMetric
     endpoint::String
     active::Bool
 end

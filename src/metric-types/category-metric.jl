@@ -7,14 +7,14 @@
 =#
 #const LOSS_PENALTY = Inf # when we found groups with 0 rates
 
-struct RealMetricCategory <: RealMetric
+struct CategoryMetric <: AbstractMetric
     size::Int
     groups::Vector{String} # names of the groups
     rates::Vector{Float64} # probabilities of each group
     cov_inv::Matrix{Float64} # inverse of the covariance matrix of the groups
     group_active::Vector{Bool}
     
-    function RealMetricCategory(size::Int, groups::Vector{String}, rates::Vector{Float64})
+    function CategoryMetric(size::Int, groups::Vector{String}, rates::Vector{Float64})
         _validate_category(groups, rates)
 
         # active groups are those with non-zero rates
@@ -46,7 +46,7 @@ end
 
 function mismatch(
     sim::AbstractVector{<:AbstractString},  # we can also use sim::Vector{String} but it will not work with DataFrame
-    dp::RealMetricCategory
+    dp::CategoryMetric
 )
     validate(sim, dp)
 
@@ -69,7 +69,7 @@ end
 
 function mismatch_expression(
     sim::AbstractVector{<:AbstractString},
-    dp::RealMetricCategory,
+    dp::CategoryMetric,
     X::Vector{VariableRef},
     X_len::Int
 )
@@ -97,7 +97,7 @@ end
 
 function validate(
     sim::AbstractVector{<:AbstractString},
-    dp::RealMetricCategory
+    dp::CategoryMetric
 ) 
     # Check that the simulation data is not empty
     isempty(sim) && 
@@ -127,5 +127,5 @@ PARSERS["category"] = (row) -> begin
     rates_string = row[Symbol("metric.rates")]
     rates = parse.(Float64, split(rates_string, ";"))
 
-    RealMetricCategory(size, groups, rates)
+    CategoryMetric(size, groups, rates)
 end

@@ -2,6 +2,6 @@ using DigiPopData, JuMP
 using Test
 
 @testset "DigiPopData" begin
-    @testset "MetricMean unit tests" begin include("metric-mean.jl") end
-    @testset "MetricMeanSD unit tests" begin include("metric-mean-sd.jl") end
+    @testset "MeanMetric unit tests" begin include("mean-metric.jl") end
+    @testset "MeanSDMetric unit tests" begin include("mean-sd-metric.jl") end
 end

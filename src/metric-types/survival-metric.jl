@@ -1,4 +1,4 @@
-struct RealMetricSurvival <: RealMetric
+struct SurvivalMetric <: AbstractMetric
     size::Int
     levels::Vector{Float64}
     values::Vector{Float64}
@@ -7,7 +7,7 @@ struct RealMetricSurvival <: RealMetric
     group_active::Vector{Bool}
     rates::Vector{Float64} # rates of the groups
 
-    RealMetricSurvival(size::Int, levels::Vector{Float64}, values::Vector{Float64}) = begin
+    SurvivalMetric(size::Int, levels::Vector{Float64}, values::Vector{Float64}) = begin
         _validate_survival(levels, values)
         # Check that the length of sim and X are equal
         length(sim) == length(X) || throw(DimensionMismatch("Length of simulation data and X must be equal"))
@@ -51,7 +51,7 @@ _validate_survival(levels::Vector{Float64}, values::Vector{Float64}) = begin
         throw(ArgumentError("`values` must be sorted in ascending order"))
 end
 
-function mismatch(sim::Vector{Float64}, dp::RealMetricSurvival)
+function mismatch(sim::Vector{Float64}, dp::SurvivalMetric)
     validate(sim, dp)
 
     len = sum(dp.group_active) - 1
@@ -70,7 +70,7 @@ end
 
 function mismatch_expression(
     sim::Vector{Float64},
-    dp::RealMetricSurvival,
+    dp::SurvivalMetric,
     X::Vector{VariableRef},
     X_len::Int
 )
@@ -96,7 +96,7 @@ function mismatch_expression(
 end
 
 
-function validate(sim::Vector{Float64}, dp::RealMetricSurvival)
+function validate(sim::Vector{Float64}, dp::SurvivalMetric)
     # Check that the simulation data is not empty
     isempty(sim) && 
         throw(ArgumentError("Simulation data cannot be empty"))
@@ -113,5 +113,5 @@ PARSERS["survival"] = (row) -> begin
     values_string = row[Symbol("metric.values")]
     values = parse.(Float64, split(values_string, ";"))
 
-    RealMetricSurvival(size, levels, values)
+    SurvivalMetric(size, levels, values)
 end

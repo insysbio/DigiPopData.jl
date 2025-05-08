@@ -25,7 +25,7 @@ Each metric compare real and virtual populations base on the following statistic
 using DigiPopData
 
 # create metric based on Survival data
-metric1 = RealMetricSurvival(
+metric1 = SurvivalMetric(
     150,    # number of patients in the real population
     [0.8111, 0.3480, 0.2852, 0.2538, 0.2307, 0.2307, 0.1818, 0.1338], # survival values in descending order
     [2., 5., 8., 10., 12., 15., 20., 25.] # time points
