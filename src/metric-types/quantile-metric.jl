@@ -7,13 +7,13 @@ struct QuantileMetric <: AbstractMetric
     size::Int
     levels::Vector{Float64}
     values::Vector{Float64}
-    skip_nan::Bool # whether to skip NaN values in the simulation data
+    skip_nan::Bool # if true NaN values are allowed in simulated data and will be ignored
 
     cov_inv::Matrix{Float64} # inverse of the covariance matrix of the groups
     group_active::Vector{Bool}
     rates::Vector{Float64} # rates of the groups
 
-    QuantileMetric(size::Int, levels::Vector{Float64}, values::Vector{Float64}, skip_nan::Bool = true) = begin
+    QuantileMetric(size::Int, levels::Vector{Float64}, values::Vector{Float64}, skip_nan::Bool = false) = begin
         _validate_quantile(levels, values)
 
         extended_levels = [0; levels; 1.0]
@@ -30,10 +30,14 @@ struct QuantileMetric <: AbstractMetric
     end
 end
 
-_validate_quantile(levels::Vector{Float64}, values::Vector{Float64}) = begin
+function _validate_quantile(levels::Vector{Float64}, values::Vector{Float64})
+    # Check that levels and values are not empty
+    !isempty(levels) || 
+        throw(ArgumentError("`levels` cannot be empty"))
+    
     # Check equal lengths
     length(levels) == length(values) || 
-        throw(ArgumentError("`levels` and `values` must have the same length"))
+        throw(DimensionMismatch("`levels` and `values` must have the same length"))
 
     # Check that levels are in (0, 1)
     all(0 .< levels .< 1) || 
@@ -48,7 +52,7 @@ _validate_quantile(levels::Vector{Float64}, values::Vector{Float64}) = begin
         throw(ArgumentError("`values` must be sorted in ascending order"))
 end
 
-function mismatch(sim::Vector{Float64}, dp::QuantileMetric)
+function mismatch(sim::AbstractVector{<:Real}, dp::QuantileMetric)
     validate(sim, dp)
 
     len = sum(dp.group_active) - 1 # degree of freedom
@@ -70,7 +74,7 @@ function mismatch(sim::Vector{Float64}, dp::QuantileMetric)
 end
 
 function mismatch_expression(
-    sim::AbstractVector{Float64},
+    sim::AbstractVector{<:Real},
     dp::QuantileMetric,
     X::Vector{VariableRef},
     X_len::Int
@@ -101,7 +105,7 @@ function mismatch_expression(
     loss
 end
 
-function validate(sim::Vector{Float64}, dp::QuantileMetric)
+function validate(sim::AbstractVector{<:Real}, dp::QuantileMetric)
     # Check that the simulation data is not empty
     isempty(sim) && 
         throw(ArgumentError("Simulation data cannot be empty"))
