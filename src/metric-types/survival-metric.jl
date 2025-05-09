@@ -9,10 +9,6 @@ struct SurvivalMetric <: AbstractMetric
 
     SurvivalMetric(size::Int, levels::Vector{Float64}, values::Vector{Float64}) = begin
         _validate_survival(levels, values)
-        # Check that the length of sim and X are equal
-        length(sim) == length(X) || throw(DimensionMismatch("Length of simulation data and X must be equal"))
-        # Check that X_len is less than sim
-        X_len <= length(sim) || throw(DimensionMismatch("X_len must be less than or equal to the length of simulation data"))
 
         # current level minus prev level
         extended_levels = [1; levels; 0.0]
@@ -34,9 +30,13 @@ struct SurvivalMetric <: AbstractMetric
 end
 
 _validate_survival(levels::Vector{Float64}, values::Vector{Float64}) = begin
+    # Check that the levels are not empty
+    isempty(levels) && 
+        throw(ArgumentError("`levels` cannot be empty"))
+    
     # Check equal lengths
     length(levels) == length(values) || 
-        throw(ArgumentError("`levels` and `values` must have the same length"))
+        throw(DimensionMismatch("`levels` and `values` must have the same length"))
 
     # Check that levels are in [0, 1]
     all(0 .<= levels .<= 1) || 
@@ -46,6 +46,10 @@ _validate_survival(levels::Vector{Float64}, values::Vector{Float64}) = begin
     issorted(levels, rev=true) || 
         throw(ArgumentError("`levels` must be sorted in descending order"))
         
+    # Check that values are not NaN
+    any(isnan, values) && 
+        throw(ArgumentError("`values` cannot contain NaN values"))
+
     # Check that values are sorted in ascending order
     issorted(values) || 
         throw(ArgumentError("`values` must be sorted in ascending order"))
@@ -75,6 +79,10 @@ function mismatch_expression(
     X_len::Int
 )
     validate(sim, dp)
+    # Check that the length of sim and X are equal
+    length(sim) == length(X) || throw(DimensionMismatch("Length of simulation data and X must be equal"))
+    # Check that X_len is less than sim
+    X_len <= length(sim) || throw(DimensionMismatch("X_len must be less than or equal to the length of simulation data"))
 
     len = sum(dp.group_active) - 1 # degree of freedom
 
@@ -95,12 +103,15 @@ function mismatch_expression(
     return loss
 end
 
-
 function validate(sim::Vector{Float64}, dp::SurvivalMetric)
     # Check that the simulation data is not empty
     isempty(sim) && 
         throw(ArgumentError("Simulation data cannot be empty"))
 
+    # Check that the simulation data is not NaN
+    any(isnan, sim) && 
+        throw(ArgumentError("Simulation data cannot contain NaN values"))
+    
     # Check that the simulation data contains no missing values
     any(ismissing, sim) && 
         throw(ArgumentError("Simulation data contains missing values"))

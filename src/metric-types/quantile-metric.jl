@@ -1,6 +1,10 @@
 #=
     XXX: Currently we accept NaN values in simulation data.
     It means that value is not exist and must be excluded from statistics, so metrics was created on this data.
+    XXX: It is possible the case when we have simulated data inside the group with 0 rate.
+    It is not the error but we should decide what to do with it.
+    Currently we ignore it.
+    Another option could be to append this simulation to the active groups.
 =#
 
 struct QuantileMetric <: AbstractMetric
@@ -47,6 +51,10 @@ function _validate_quantile(levels::Vector{Float64}, values::Vector{Float64})
     issorted(levels) || 
         throw(ArgumentError("`levels` must be sorted in ascending order"))
 
+    # Check that values are not NaN
+    any(isnan, values) && 
+        throw(ArgumentError("`values` cannot contain NaN values"))
+        
     # check that values are sorted in ascending order
     issorted(values) || 
         throw(ArgumentError("`values` must be sorted in ascending order"))
