@@ -12,4 +12,5 @@ end
 
 @testset "DigiPopData other unit tests" begin
     @testset "MetricBinding unit tests" begin include("metric-binding.jl") end
+    @testset "loaders unit tests" begin include("loaders.jl") end
 end

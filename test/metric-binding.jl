@@ -15,4 +15,4 @@ df1 = DataFrame(
 @test get_loss(df1, [mb2]) ≈ 108.
 @test get_loss(df1, [mb3]) ≈ 0.0
 @test get_loss(df1, [mb1, mb2, mb3]) ≈ 108.0
-
+@test get_loss(df1, MetricBinding[]) ≈ 0.

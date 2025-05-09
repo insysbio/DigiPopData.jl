@@ -7,7 +7,7 @@ include("loaders.jl")
 
 export mismatch, mismatch_expression
 export MetricBinding, get_loss
-export loadMetricBindings
+export parse_metric_bindings
 
 # list of data point types can be extended by adding new types to this list
 include("metric-types/mean-metric.jl")
