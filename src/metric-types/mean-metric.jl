@@ -60,10 +60,10 @@ end
 
 PARSERS["mean"] = (row) -> begin
     size = row[Symbol("metric.size")]
-    mean_string = row[Symbol("metric.mean")]
-    mean = parse(Float64, mean_string)
-    sd_string = row[Symbol("metric.sd")]
-    sd = parse(Float64, sd_string)
+    mean = row[Symbol("metric.mean")] |> safe_float
+    sd = row[Symbol("metric.sd")] |> safe_float
 
     MeanMetric(size, mean, sd)
 end
+
+safe_float(x) = x isa String ? parse(Float64, x) : float(x)
