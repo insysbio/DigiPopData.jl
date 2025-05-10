@@ -1,3 +1,5 @@
+[![GitHub license](https://img.shields.io/github/license/insysbio/DigiPopdata.jl.svg)](https://github.com/insysbio/DigiPopdata.jl/blob/master/LICENSE)
+
 # DigiPopData.jl
 Data prep and visualization tools for Virtual Patient QSP modeling
 

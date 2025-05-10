@@ -11,10 +11,10 @@ using Test
     @testset "SurvivalMetric unit tests" begin include("survival-metric.jl") end
 
     @testset "MeanMetric parser tests" begin include("mean-metric-parser.jl") end
-    #@testset "MeanSDMetric parser tests" begin include("mean-sd-metric-parser.jl") end
-    #@testset "CategoryMetric parser tests" begin include("category-metric-parser.jl") end
-    #@testset "QuantileMetric parser tests" begin include("quantile-metric-parser.jl") end
-    #@testset "SurvivalMetric parser tests" begin include("survival-metric-parser.jl") end
+    @testset "MeanSDMetric parser tests" begin include("mean-sd-metric-parser.jl") end
+    @testset "CategoryMetric parser tests" begin include("category-metric-parser.jl") end
+    @testset "QuantileMetric parser tests" begin include("quantile-metric-parser.jl") end
+    @testset "SurvivalMetric parser tests" begin include("survival-metric-parser.jl") end
 end
 
 @testset "DigiPopData other unit tests" begin
