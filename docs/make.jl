@@ -14,6 +14,7 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/insysbio/DigiPopData.git",
-    devbranch = "main"
+    repo = "github.com/insysbio/DigiPopData.jl.git",
+    devbranch = "main",
+    # versions = ["stable" => "v^", "v#.#.#"], 
 )
