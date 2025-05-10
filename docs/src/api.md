@@ -1,2 +1,2 @@
-Modules = [HetaSimulator]
+Modules = [DigiPopData]
 Order   = [:type, :function]
