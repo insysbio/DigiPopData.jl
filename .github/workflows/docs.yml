@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - test-release
+    tags: '*'
 
 jobs:
   docs:
@@ -22,9 +23,13 @@ jobs:
           path: ~/.julia/artifacts
 
       - name: Install dependencies
-        run: julia --project=docs -e 'using Pkg; Pkg.instantiate()'
+        run: |
+          julia --project=docs -e '
+            using Pkg;
+            Pkg.develop(PackageSpec(path=pwd()));
+            Pkg.instantiate()
 
-      - name: Build and deploy docs
-        run: julia --project=docs docs/make.jl
+      - name: Build and deploy documentation
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: julia --project=docs docs/make.jl

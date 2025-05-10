@@ -1,13 +1,13 @@
 using Documenter, DigiPopData
 
 makedocs(
-    sitename = "DigiPopData",
+    sitename = "DigiPopData.jl",
     authors = "Ivan Borisov, Evgeny Metelkin",
     modules = [DigiPopData],
     format = Documenter.HTML(),
     pages = [
         "Home" => "index.md",
-        "API" => "api.md",
+        #"API" => "api.md",
     ]
 )
 
