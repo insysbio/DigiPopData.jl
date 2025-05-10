@@ -7,11 +7,14 @@ makedocs(
     format = Documenter.HTML(),
     pages = [
         "Home" => "index.md",
-        #"API" => "api.md",
-    ]
+        "API" => "api.md",
+    ],
+    warnonly = [:missing_docs],
+    # checkdocs = :none
 )
 
 deploydocs(
-    repo = "github.com/insysbio/DigiPopData.git",
-    devbranch = "main"
+    repo = "github.com/insysbio/DigiPopData.jl.git",
+    devbranch = "main",
+    # versions = ["stable" => "v^", "v#.#.#"], 
 )
