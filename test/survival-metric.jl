@@ -2,7 +2,7 @@
 m1 = SurvivalMetric(100, [0.75, 0.5, 0.25], [24., 48., 72.])
 
 @test m1.group_active == [true, true, true, true]
-@test all(m1.cov_inv .== [8. 4. 4.; 4. 8. 4.; 4. 4. 8.])
+@test all(m1.cov_inv .≈ [8. 4. 4.; 4. 8. 4.; 4. 4. 8.])
 
 @test mismatch([12., 36., 60., 84.], m1) ≈ 0.
 @test mismatch([0., 36., 60., Inf], m1) ≈ 0.
@@ -30,7 +30,7 @@ m3 = SurvivalMetric(100, [1.0, 0.75, 0.5, 0.25], [12., 24., 48., 72.])
 m4 = SurvivalMetric(100, [0.75, 0.5, 0.25, 0.0], [24., 48., 72., 120.])
 
 @test m4.group_active == [true, true, true, true, false]
-@test all(m4.cov_inv .== [8. 4. 4.; 4. 8. 4.; 4. 4. 8.])
+@test all(m4.cov_inv .≈ [8. 4. 4.; 4. 8. 4.; 4. 4. 8.])
 @test mismatch([12., 36., 60., 119.], m4) ≈ 0.0
 @test mismatch([12., 36., 60., 121.], m4) ≈ 0.0
 

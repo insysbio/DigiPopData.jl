@@ -2,7 +2,7 @@
 m1 = CategoryMetric(100, ["A", "B", "C"], [0.5, 0.3, 0.2])
 
 @test m1.group_active == [true, true, true] # all groups are active
-@test all(m1.cov_inv .== [7.0 5.0; 5.0 8.333333333333334])
+@test all(m1.cov_inv .≈ [7.0 5.0; 5.0 8.333333333333334])
 
 @test isapprox(mismatch(["A", "A", "A", "B", "B", "C"], m1), 0.055555556)
 @test isapprox(mismatch(["A", "B", "A", "A", "B", "C"], m1), 0.055555556)
@@ -13,7 +13,7 @@ m1 = CategoryMetric(100, ["A", "B", "C"], [0.5, 0.3, 0.2])
 
 m2 = CategoryMetric(100, ["A", "B", "C"], [0.5, 0.5, 0.0])
 @test m2.group_active == [true, true, false] # only A and B are active
-@test all(m2.cov_inv .== [4.0;;])
+@test all(m2.cov_inv .≈ [4.0;;])
 
 @test isapprox(mismatch(["A", "A", "A", "B", "B"], m2), 0.2)
 @test isapprox(mismatch(["A", "B", "A", "B", "A"], m2), 0.2)

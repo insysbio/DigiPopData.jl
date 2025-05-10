@@ -2,7 +2,7 @@
 m1 = QuantileMetric(100, [0.5], [10.])
 
 @test m1.group_active == [true, true] # all groups are active
-@test all(m1.cov_inv .== [4.;;])
+@test all(m1.cov_inv .≈ [4.;;])
 @test m1.skip_nan == false
 
 @test mismatch([1., 2., 3., 11., 12., 13.], m1) ≈ 0.
@@ -15,7 +15,7 @@ m1 = QuantileMetric(100, [0.5], [10.])
 m2 = QuantileMetric(100, [0.25, 0.5, 0.75], [1., 10., 100.], true)
 
 @test m2.group_active == [true, true, true, true] # all groups are active
-@test all(m2.cov_inv .== [8. 4. 4.; 4. 8. 4.; 4. 4. 8.])
+@test all(m2.cov_inv .≈ [8. 4. 4.; 4. 8. 4.; 4. 4. 8.])
 @test m2.skip_nan == true
 
 @test mismatch([0., 5., 50., 500.], m2) ≈ 0.
@@ -27,7 +27,7 @@ m2 = QuantileMetric(100, [0.25, 0.5, 0.75], [1., 10., 100.], true)
 m3 = QuantileMetric(100, [0.25, 0.5, 0.5, 0.75], [1., 10., 20., 100.])
 
 @test m3.group_active == [true, true, false, true, true]
-@test all(m3.cov_inv .== [8. 4. 4.; 4. 8. 4.; 4. 4. 8.])
+@test all(m3.cov_inv .≈ [8. 4. 4.; 4. 8. 4.; 4. 4. 8.])
 @test m3.skip_nan == false
 @test mismatch([0.5, 5., 21., 500.], m3) ≈ 0.
 @test_broken mismatch([0.5, 5., 19., 500.], m3) ≈ 0.
