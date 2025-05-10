@@ -1,3 +1,5 @@
+[![CI](https://github.com/insysbio/DigiPopData.jl/actions/workflows/autotest.yml/badge.svg)](https://github.com/insysbio/DigiPopData.jl/actions/workflows/autotest.yml)
+[![codecov](https://codecov.io/gh/insysbio/DigiPopData.jl/graph/badge.svg?token=939QCNXCYP)](https://codecov.io/gh/insysbio/DigiPopData.jl)
 [![GitHub license](https://img.shields.io/github/license/insysbio/DigiPopdata.jl.svg)](https://github.com/insysbio/DigiPopdata.jl/blob/master/LICENSE)
 
 # DigiPopData.jl
