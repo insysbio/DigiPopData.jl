@@ -17,11 +17,13 @@ It also expect the specific format for the virtual population data, which is a D
 
 Each metric compare real and virtual populations base on the following statistics:
 
-- `Mean` - compare the mean
-- `MeanSD` - compare the mean and standard deviation
-- `Category` - compare the categorical distribution
-- `Quantile` - compare the quantile values
-- `Survival` - compare the survival curves
+| Julia struct | metric.type in DataFrame | Description |
+|--------|--------------------------|-------------|
+| MeanMetric | `mean` | Compare the mean. |
+| MeanSDMetric | `mean_sd` | Compare the mean and standard deviation. |
+| CategoryMetric | `category` | Compare the categorical distribution. |
+| QuantileMetric | `quantile` | Compare the quantile values. |
+| SurvivalMetric | `survival` | Compare the survival curves. |
 
 ## Code example
 

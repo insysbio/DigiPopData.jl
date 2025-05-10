@@ -18,7 +18,7 @@ jobs:
       - uses: julia-actions/cache@v1
         with:
           cache-name: 'docs'
-          path: ~/.julia/artifacts
+          cache-artifacts: true
 
       - name: Install dependencies
         run: julia --project=docs -e "using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()"
