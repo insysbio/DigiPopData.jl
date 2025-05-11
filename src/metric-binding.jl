@@ -1,6 +1,30 @@
 using DataFrames
 
-# store data and connection to endpoint
+"""
+    MetricBinding(
+        id::String,
+        scenario::String,
+        metric::AbstractMetric,
+        endpoint::String,
+        active::Bool
+    )
+
+Structure which is container that binds a **scenario**, an **endpoint** and a concrete
+[`AbstractMetric`](@ref) description into a single unit that can be logged,
+displayed or passed to optimisation / validation routines.
+
+# Fields
+| Name        | Type                     | Description                                               |
+|-------------|--------------------------|-----------------------------------------------------------|
+| `id`        | `String`                 | Unique identifier of the binding |
+| `scenario`  | `String`                 | Scenario (e.g. simulation arm) in which the metric is evaluated |
+| `metric`    | [`AbstractMetric`](@ref) | Metric implementation (`MeanMetric`, `CategoryMetric`, …) |
+| `endpoint`  | `String`                 | Observable / model variable the metric is computed for    |
+| `active`    | `Bool`                   | Whether the binding is enabled (`true` by default)        |
+
+## Returns
+`MetricBinding`
+"""
 struct MetricBinding
     id::String # not sure this is needed
     scenario::String
@@ -9,7 +33,7 @@ struct MetricBinding
     active::Bool
 end
 
-# TODO: for future use, when we need check all data befor we start calculation
+# TODO: for future use, when we need check all data before we start calculation
 function _validate_simulated(simulated::DataFrame, metric_bindings::Vector{MetricBinding})
 
 end
@@ -26,6 +50,22 @@ function get_loss(simulated::DataFrame, metric_bindings::Vector{MetricBinding}, 
 end
 
 # calculate for all patients in the cohort
+"""
+    get_loss(simulated::DataFrame, metric_bindings::Vector{MetricBinding})
+
+Calculate the loss for a given set of metric bindings and a simulated DataFrame.
+The function iterates over the metric bindings, selecting the relevant data from the simulated DataFrame
+ based on the scenario and endpoint specified in each binding. It then computes the loss using the `mismatch`
+ function defined in the metric.
+
+## Arguments
+- `simulated::DataFrame`: A DataFrame containing the simulated data.
+- `metric_bindings::Vector{MetricBinding}`: A vector of `MetricBinding` objects, each containing a scenario,
+endpoint, and metric.
+
+## Returns
+- `loss::Float64`: The total loss calculated as the sum of the individual losses from each metric binding.
+"""
 function get_loss(simulated::DataFrame, metric_bindings::Vector{MetricBinding})
     _validate_simulated(simulated, metric_bindings)
 

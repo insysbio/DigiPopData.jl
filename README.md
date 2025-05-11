@@ -1,5 +1,6 @@
 [![CI](https://github.com/insysbio/DigiPopData.jl/actions/workflows/autotest.yml/badge.svg)](https://github.com/insysbio/DigiPopData.jl/actions/workflows/autotest.yml)
 [![codecov](https://codecov.io/gh/insysbio/DigiPopData.jl/graph/badge.svg?token=939QCNXCYP)](https://codecov.io/gh/insysbio/DigiPopData.jl)
+[![docs-stable](https://img.shields.io/badge/docs-dev-blue?logo=githubpages)](https://insysbio.github.io/DigiPopData.jl/dev/)
 [![GitHub license](https://img.shields.io/github/license/insysbio/DigiPopdata.jl.svg)](https://github.com/insysbio/DigiPopdata.jl/blob/master/LICENSE)
 
 # DigiPopData.jl
@@ -17,13 +18,13 @@ It also expect the specific format for the virtual population data, which is a D
 
 Each metric compare real and virtual populations base on the following statistics:
 
-| Julia struct | metric.type in DataFrame | Description |
-|--------|--------------------------|-------------|
-| MeanMetric | `mean` | Compare the mean. |
-| MeanSDMetric | `mean_sd` | Compare the mean and standard deviation. |
-| CategoryMetric | `category` | Compare the categorical distribution. |
-| QuantileMetric | `quantile` | Compare the quantile values. |
-| SurvivalMetric | `survival` | Compare the survival curves. |
+| Julia struct | metric.type in DataFrame | Bin optimization | Description |
+|--------------|--------------------------|------------------|-------------|
+| `MeanMetric` | mean | + | Compare the mean. |
+| `MeanSDMetric` | mean_sd | + |Compare the mean and standard deviation. |
+| `CategoryMetric` | category | + | Compare the categorical distribution. |
+| `QuantileMetric` | quantile | + | Compare the quantile values. |
+| `SurvivalMetric` | survival | + | Compare the survival curves. |
 
 ## Code example
 

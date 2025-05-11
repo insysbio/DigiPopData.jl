@@ -3,7 +3,8 @@ const PARSERS = Dict{String, Function}()
 """
     parse_metric_bindings(df::DataFrame)
 
-Parses a DataFrame containing metric bindings and returns an array of `MetricBinding` objects.
+Parse a `DataFrame` with metric‑binding definitions and return a vector of [`MetricBinding`](@ref) objects.
+
 The DataFrame should contain the following columns:
 - `id`: Unique identifier for the metric binding.
 - `scenario`: The scenario to which the metric binding applies.
@@ -12,9 +13,9 @@ The DataFrame should contain the following columns:
 - `active`: (optional) A boolean indicating whether the metric binding is active (default is `true`).
 The function uses the `PARSERS` dictionary to find the appropriate parser for the metric type.
 The function iterates over each row of the DataFrame, extracting the relevant information and creating a `MetricBinding` object.
-    
-    Returns
-An array of `MetricBinding` objects.
+
+## Returns
+`Vector{MetricBinding}`
 """
 function parse_metric_bindings(df::DataFrame)
     bindings = MetricBinding[]
