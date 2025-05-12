@@ -12,7 +12,7 @@ m1 = QuantileMetric(100, [0.5], [10.])
 @test_throws ArgumentError mismatch(Float64[], m1)
 
 # correct input skip_nan = true
-m2 = QuantileMetric(100, [0.25, 0.5, 0.75], [1., 10., 100.], true)
+m2 = QuantileMetric(100, [0.25, 0.5, 0.75], [1., 10., 100.]; skip_nan=true)
 
 @test m2.group_active == [true, true, true, true] # all groups are active
 @test all(m2.cov_inv .≈ [8. 4. 4.; 4. 8. 4.; 4. 4. 8.])

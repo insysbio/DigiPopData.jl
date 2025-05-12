@@ -14,6 +14,8 @@ The package provides the unified table format for the real population data, divi
 
 It also expect the specific format for the virtual population data, which is a DataFrame.
 
+See the [documentation](https://insysbio.github.io/DigiPopData.jl/dev/) for more details.
+
 ## Implemented metrics
 
 Each metric compare real and virtual populations base on the following statistics:
@@ -26,7 +28,9 @@ Each metric compare real and virtual populations base on the following statistic
 | `QuantileMetric` | quantile | + | Compare the quantile values. |
 | `SurvivalMetric` | survival | + | Compare the survival curves. |
 
-## Code example
+## Code examples
+
+Calculation of the loss function for the `MeanMetric` metric type:
 
 ```julia
 using DigiPopData
@@ -43,16 +47,22 @@ loss_value = mismatch(
     [2., 1.4, 4.4, 6., 7.89], # individual survival times for 5 patients
     metric1
 )
+```
 
-# connect metric to the virtual population endpoints
-# can be used for the loss function calculation based on simulated endpoints
-binding1 = MetricBinding(
-    "Point1", # unique identifier for the binding
-    "scn1",   # reference to simulation scenario
-    metric1,  # connected metric
-    "TTE",    # name of endpoint (variable) in virtual individual point
-    true      # if false, the metric has no input to loss function
-)
+Get loss value for metrics and simulations from the CSV files
+
+```julia
+using DigiPopData
+using DataFrames, CSV
+
+# Load the real population data from CSV file
+metrics_df = CSV.read("metrics.csv", DataFrame)
+metrics = parse_metric_bindings(metrics_df)
+
+# Load the virtual population data from CSV file
+virtual_df = CSV.read("virtual_population.csv", DataFrame)
+
+loss = get_loss(virtual_df, metrics)
 ```
 
 ## License
